@@ -8,7 +8,7 @@ homeassistant:
   customize: !include customize.yaml
   whitelist_external_dirs:
     - /home/homeassistant/.homeassistant/files/
-#Coap
+    
 #group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
