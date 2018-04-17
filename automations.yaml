@@ -1,0 +1,151 @@
+#Set the sporify volume with number in an input number
+- alias: Set Spotify Volume
+  trigger:
+    platform: state
+    entity_id: input_number.spotify_volume
+  action:
+    service: media_player.volume_set
+    data_template:
+      entity_id: media_player.spotify
+      volume_level: '{{  states.input_number.spotify_volume.state  }}'
+#Turn on led strip with orange color set to orange when is 7.10 of morning with 30 second fade
+- action:
+  - data:
+      color_name: orange
+      entity_id: light.led_strip
+      transition: '30'
+    service: light.turn_on
+  alias: Morning light on
+  condition: []
+  id: '1522928376736'
+  trigger:
+  - at: 07:10:00
+    platform: time
+#Turn off led strip when is 7.20 of morning witj 3 second fade
+- action:
+  - data:
+      entity_id: light.led_strip
+      transition: '3'
+    service: light.turn_off
+  alias: Morning light off
+  condition: []
+  id: '1522928462873'
+  trigger:
+  - at: 07:15:00
+    platform: time
+#Send telegram message with temperature value of the sensors when telegram bot receive /temperature command
+- alias: Telegram bot that reply temperature
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /temperature
+  action:
+    service: notify.telegram_push
+    data:
+      title: '*Temperature*'
+      message: '{{states.sensor.temperature.state}} °C BME280
+
+        {{states.sensor.temperature_external.state}} °C DS18B20'
+#Send telegram message with ping sensor value when telegram bot receive /ping command
+- alias: Telegram bot that reply ping
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /ping
+  action:
+    service: notify.telegram_push
+    data:
+      title: '*Ping*'
+      message: '{{states.sensor.speedtest_ping.state}} Sec'
+#Toggle the spotlights switch when telegram bot receive /spotlights command
+- alias: Telegram bot that toggle spotlights
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /spotlights
+  action:
+    - service: notify.telegram_push
+      data:
+        title: '*Light toggled*'
+        message: 'Light toggled'
+    - service: switch.turn_on
+      data:
+        entity_id: switch.spotlights
+#Turn on the bed light switch when telegram bot receive /bedlight_on command
+- alias: Telegram bot that light on bed light
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /bedlight_on
+  action:
+    - service: notify.telegram_push
+      data:
+        title: '*Light turned on*'
+        message: 'Light turned on'
+    - service: switch.turn_on
+      data:
+        entity_id: switch.bed_light
+#Turn off the bed light switch when telegram bot receive /bedlight_off command
+- alias: Telegram bot that light off bed light
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /bedlight_off
+  action:
+    - service: notify.telegram_push
+      data:
+        title: '*Light turned off*'
+        message: 'Light turned off'
+    - service: switch.turn_off
+      data:
+        entity_id: switch.bed_light
+#Send telegram message with the state of the light when telegram bot receive /light_state command
+- alias: Telegram bot that reply light state
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /light_state
+  action:
+    service: notify.telegram_push
+    data:
+      message: 'Bed light *{{states.switch.bed_light.state}}*
+
+        Spotlights *{{states.switch.spotlights.state}}*
+
+        Led strip bookshelf *{{states.light.led_strip.state}}*
+
+        Led strip desktop *{{states.light.lightstrip_desktop.state}}*
+
+        '
+#Update available notification
+- alias: Update Available Notifications
+  trigger:
+    platform: state
+    entity_id: updater.updater
+  action:
+    service: notify.html5
+    data:
+      message: Update for Home Assistant is available.
+#If probabilly rainy send telegram notification
+- action:
+  - data:
+      message: 'test: forse piove!'
+      data:
+        photo:
+          file: /home/homeassistant/.homeassistant/files/rain.jpg
+          caption: Forse piove! Prendi l'ombrello!
+    service: notify.telegram_push
+  alias: 'telegram: forse piove'
+  id: telegram_forse_piove
+  condition: []
+  hide_entity: false
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.dark_sky_precip_probability
+    above: 80

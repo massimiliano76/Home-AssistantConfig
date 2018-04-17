@@ -1,0 +1,87 @@
+sensor.humidity:
+  icon: mdi:water-percent
+sensor.temperature:
+  icon: mdi:temperature-celsius
+  unit_of_measurement: °C
+switch.sonoff_second:
+  icon: mdi:ceiling-light
+automation.luce_camera:
+  icon: mdi:home-automation
+automation.pulsante_faretti:
+  friendly_name: Spotlights Button
+  icon: mdi:home-automation
+switch.sonoff_first:
+  icon: mdi:lightbulb
+switch.bed_light:
+  icon: mdi:lightbulb
+switch.spotlights:
+  icon: mdi:ceiling-light
+automation.spotlights_button:
+  icon: mdi:toggle-switch
+switch.wol_livio_pc:
+  icon: mdi:desktop-tower
+sensor.weather_alessandria_humidity:
+  icon: mdi:water-percent
+sensor.weather_alessandria_temperature:
+  icon: mdi:temperature-celsius
+sensor.weather_alessandria_forecast:
+  icon: mdi:weather-partlycloudy
+sensor.weather_alessandria_condition:
+  icon: mdi:weather-partlycloudy
+sensor.liviopc01_nvidia_geforce_gtx_960_temperatures_gpu_core:
+  friendly_name: NVIDIA GeForce GTX 960 Temperatures GPU Core
+  icon: mdi:temperature-celsius
+sensor.liviopc01_intel_core_i54690_temperatures_cpu_package:
+  friendly_name: Intel Core i5-4690 Temperatures CPU Package
+  icon: mdi:temperature-celsius
+weblink.router:
+  icon: mdi:router-wireless
+media_player.spotify:
+  icon: mdi:spotify
+media_player.plex_web_chrome:
+  show_all_controls: 'true'
+sensor.liviopc01_generic_memory_data_available_memory:
+  friendly_name: Generic Memory Data Available Memory
+  icon: mdi:memory
+sensor.liviopc01_generic_memory_data_used_memory:
+  friendly_name: Generic Memory Data Used Memory
+  icon: mdi:memory
+sensor.liviopc01_intel_core_i54690_load_cpu_total:
+  friendly_name: Intel Core i5-4690 Load CPU Total
+  icon: mdi:reload
+sensor.temperature_external:
+  icon: mdi:temperature-celsius
+  unit_of_measurement: °C
+device_tracker.2c10c1d45c48: {}
+switch.wol_nas:
+  icon: mdi:server
+sensor.speedtest_download: {}
+sensor.fastcom_download:
+  icon: mdi:speedometer
+sensor.ssl_cert_expiry:
+  friendly_name: SSL Certificate Expiry
+  icon: mdi:certificate
+sensor.bad_login:
+  icon: mdi:account-alert
+light.led_strip:
+  icon: mdi:led-strip
+sensor.homeassistant_ssl_certificate:
+  friendly_name: SSL Certificate Remaining Days
+  unit_of_measurement: days
+light.lightstrip_desktop:
+  icon: mdi:led-strip
+light.xiaomi_desk_lamp:
+  icon: mdi:lamp
+sensor.pressure:
+  icon: mdi:pulse
+script.spotify_music:
+  friendly_name: Riproduci
+  icon: mdi:play
+group.music_spotify:
+  icon: mdi:youtube-tv
+group.mediaplayer_view:
+  icon: mdi:television
+group.weather_view:
+  icon: mdi:weather-partlycloudy
+group.bedroom_view:
+  icon: mdi:hotel

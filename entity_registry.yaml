@@ -1,0 +1,4 @@
+media_player.bedroom_2:
+  name:
+  platform: cast
+  unique_id: 4b64855c-06d7-021a-d264-1712d5eeac30

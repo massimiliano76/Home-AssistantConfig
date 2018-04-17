@@ -1,0 +1,597 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
+  unit_system: metric
+  time_zone: Europe/Rome
+  customize: !include customize.yaml
+  whitelist_external_dirs:
+    - /home/homeassistant/.homeassistant/files/
+#Coap
+#group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+zone:
+  - name: School
+    latitude: !secret school-latitude
+    longitude: !secret school-longitude
+    radius: 70
+    icon: mdi:school
+  - name: School Branch
+    latitude: !secret school-branch-latitude
+    longitude: !secret school-branch-longitude
+    radius: 30
+    icon: mdi:school
+  - name: Home
+    latitude: !secret latitude
+    longitude: !secret longitude
+    radius: 30
+    icon: mdi:home-variant
+
+frontend:
+  themes: !include_dir_merge_named themes/
+
+recorder:
+  purge_interval: 7
+  purge_keep_days: 2
+
+logger:
+  default: critical
+  logs:
+    homeassistant.components.http: warning
+    homeassistant.components.http.ban: warning
+
+config:
+
+cloud:
+
+alarm_control_panel:
+  - platform: manual
+
+updater:
+
+map:
+
+discovery:
+
+conversation:
+
+logbook:
+
+mqtt:
+  broker: !secret mqtt_broker_ip
+  port: !secret mqtt_broker_port
+  client_id: !secret mqtt_broker_client_id
+  username: !secret mqtt_broker_username
+  password: !secret mqtt_broker_password
+
+shopping_list:
+
+weblink:
+  entities:
+    - name: Router
+      icon: mdi:router-wireless
+      url: !secret url_router
+    - name: Plex
+      icon: mdi:plex
+      url: !secret url_plex
+    - name: Configurator
+      icon: mdi:wrench
+      url: !secret url_configurator
+
+ifttt:
+  key: !secret ifttt_key
+
+http:
+  api_password: !secret http_api_password
+  ssl_certificate: !secret http_ssl_certificate
+  ssl_key: !secret http_ssl_key
+  base_url: !secret http_base_url
+
+history:
+  exclude:
+    entities:
+      - sensor.liviopc01_generic_memory_data_available_memory
+      - sensor.liviopc01_generic_memory_data_used_memory
+      - sensor.liviopc01_generic_memory_load_memory
+      - sensor.liviopc01_intel_core_i54690_clocks_bus_speed
+      - sensor.liviopc01_intel_core_i54690_clocks_cpu_core_1
+      - sensor.liviopc01_intel_core_i54690_clocks_cpu_core_2
+      - sensor.liviopc01_intel_core_i54690_clocks_cpu_core_3
+      - sensor.liviopc01_intel_core_i54690_clocks_cpu_core_4
+      - sensor.liviopc01_intel_core_i54690_load_cpu_core_1
+      - sensor.liviopc01_intel_core_i54690_load_cpu_core_2
+      - sensor.liviopc01_intel_core_i54690_load_cpu_core_3
+      - sensor.liviopc01_intel_core_i54690_load_cpu_core_4
+      - sensor.liviopc01_intel_core_i54690_load_cpu_total
+      - sensor.liviopc01_intel_core_i54690_powers_cpu_cores
+      - sensor.liviopc01_intel_core_i54690_powers_cpu_dram
+      - sensor.liviopc01_intel_core_i54690_powers_cpu_graphics
+      - sensor.liviopc01_intel_core_i54690_powers_cpu_package
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_core_1
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_core_2
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_core_3
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_core_4
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_package
+      - sensor.liviopc01_nvidia_geforce_gtx_960_clocks_gpu_core
+      - sensor.liviopc01_nvidia_geforce_gtx_960_clocks_gpu_memory
+      - sensor.liviopc01_nvidia_geforce_gtx_960_clocks_gpu_shader
+      - sensor.liviopc01_nvidia_geforce_gtx_960_controls_gpu_fan
+      - sensor.liviopc01_nvidia_geforce_gtx_960_data_gpu_memory_free
+      - sensor.liviopc01_nvidia_geforce_gtx_960_data_gpu_memory_total
+      - sensor.liviopc01_nvidia_geforce_gtx_960_data_gpu_memory_used
+      - sensor.liviopc01_nvidia_geforce_gtx_960_fans_gpu
+      - sensor.liviopc01_nvidia_geforce_gtx_960_load_gpu_core
+      - sensor.liviopc01_nvidia_geforce_gtx_960_load_gpu_memory
+      - sensor.liviopc01_nvidia_geforce_gtx_960_load_gpu_memory_controller
+      - sensor.liviopc01_nvidia_geforce_gtx_960_load_gpu_video_engine
+      - sensor.liviopc01_nvidia_geforce_gtx_960_temperatures_gpu_core
+      - sensor.liviopc01_wdc_wd10ezex22bn5a0_load_used_space
+      - sensor.liviopc01_wdc_wd10ezex22bn5a0_temperatures_temperature
+      - sensor.liviopc01_generic_hard_disk_load_used_space
+      - weblink.router
+      - weblink.plex
+      - weblink.configurator
+tts:
+  - platform: google
+
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_allow_chat_ids_1
+      - !secret telegram_allow_chat_ids_2
+
+notify:
+  - name: Telegram_push
+    platform: telegram
+    chat_id: !secret telegram_allow_chat_ids_1
+  - name: Html5
+    platform: html5
+    gcm_api_key: !secret gcm-api-key
+    gcm_sender_id: !secret gcm-sender-id
+
+panel_custom:
+  - name: floorplan
+    sidebar_title: Floorplan
+    sidebar_icon: mdi:home
+    url_path: floorplan
+    config: !include floorplan.yaml
+
+switch wol:
+  - platform: wake_on_lan
+    mac_address: !secret wol_mac_address_liviopc
+    name: WOL Livio Pc
+    host: !secret wol_host_liviopc
+  - platform: wake_on_lan
+    mac_address: !secret wol_mac_address_nas
+    name: WOL NAS
+    host: !secret wol_host_nas
+
+duckdns:
+  domain: !secret duckdns_domain
+  access_token: !secret duckdns_access_token
+
+sensor ihbp:
+  platform: haveibeenpwned
+  email:
+    - !secret ihbp_email_1
+    - !secret ihbp_email_2
+    - !secret ihbp_email_3
+    - !secret ihbp_email_4
+
+device_tracker:
+  - platform: nmap_tracker
+    hosts: 192.168.1.1-255
+    consider_home: 900
+    interval_seconds: 300
+    home_interval: 15
+    track_new_devices: true
+  - platform: owntracks_http
+
+sensor ohm:
+  - platform: openhardwaremonitor
+    host: !secret ohm_host
+
+sensor speedtest:
+  - platform: speedtest
+    server_id: !secret speedtest_server_id
+    minute: 30
+    hour:
+      - 0
+      - 6
+      - 11
+      - 18
+    monitored_conditions:
+      - upload
+      - ping
+  - platform: fastdotcom
+    minute: 15
+    hour:
+      - 0
+      - 6
+      - 12
+      - 18
+
+weather:
+  - platform: openweathermap
+    api_key: !secret openweathermap_api_key
+  - platform: darksky
+    api_key: !secret dark_sky_api_key
+    unit: si
+    name: Dark Sky
+
+sensor:
+  - platform: mqtt
+    name: "Temperature"
+    state_topic: "sensor/temperature"
+    qos: 0
+  - platform: mqtt
+    name: "Humidity"
+    state_topic: "sensor/humidity"
+    qos: 0
+    unit_of_measurement: "%"
+  - platform: mqtt
+    name: "Pressure"
+    state_topic: "sensor/pressure"
+    qos: 0
+    unit_of_measurement: "hPa"
+  - platform: mqtt
+    name: "Temperature External"
+    state_topic: "sensor/temperature1"
+    qos: 0
+  - platform: filter
+    name: "filtered realistic external temperature"
+    entity_id: sensor.temperature_external
+    filters:
+      - filter: outlier
+        window_size: 4
+        radius: 4.0
+      - filter: lowpass
+        time_constant: 10
+        precision: 2
+  - platform: plex
+    name: Plex Nas
+    host: !secret plex_host
+    port: !secret plex_port
+    token: !secret plex_token
+  - platform: uptime
+    name: Uptime
+  - platform: darksky
+    api_key: !secret dark_sky_api_key
+    monitored_conditions:
+      - summary
+      - icon
+      - precip_probability
+      - nearest_storm_distance
+  - platform: command_line
+    name: SSL cert expiry
+    unit_of_measurement: days
+    scan_interval: 10800
+    command: "ssl-cert-check -b -c /etc/letsencrypt/live/examplehome.duckdns.org/cert.pem | awk '{ print $NF }'"
+  - platform: time_date
+    display_options:
+      - 'time'
+  - platform: command_line
+    name: Bad Login
+    command: "grep -c 'Login attempt' /home/homeassistant/.homeassistant/home-assistant.log"
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    # If errors occur, remove degree symbol below
+    unit_of_measurement: "°C"
+    scan_interval: 120
+    value_template: '{{ value | multiply(0.001) | round(2) }}'
+  - platform: cert_expiry
+    host: !secret cert_expiry_host
+    name: HomeAssistant SSL Certificate
+  - platform: mqtt
+    name: "Energy"
+    state_topic: "tele/sonoff-pow/SENSOR"
+    value_template: '{{ value_json["ENERGY"]["Today"] }}'
+    unit_of_measurement: "kWh"
+  - platform: mqtt
+    name: "Power"
+    state_topic: "tele/sonoff-pow/SENSOR"
+    value_template: '{{ value_json["ENERGY"]["Power"] }}'
+    unit_of_measurement: "W"
+  - platform: mqtt
+    name: "Voltage"
+    state_topic: "tele/sonoff-pow/SENSOR"
+    value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+    unit_of_measurement: "V"
+  - platform: mqtt
+    name: "Current"
+    state_topic: "tele/sonoff-pow/SENSOR"
+    value_template: '{{ value_json["ENERGY"]["Current"] }}'
+    unit_of_measurement: "A"
+
+switch:
+  - platform: mqtt
+    name: "Bed Light"
+    state_topic: "stat/sonoff-first/POWER"
+    command_topic: "cmnd/sonoff-first/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    retain: true
+switch 2:
+  - platform: mqtt
+    name: "Spotlights"
+    state_topic: "stat/sonoff-second/POWER"
+    command_topic: "cmnd/sonoff-second/POWER"
+    qos: 2
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    retain: false
+switch 3:
+  - platform: mqtt
+    name: "Sonoff 3"
+    state_topic: "stat/sonoff-third/POWER"
+    command_topic: "cmnd/sonoff-third/POWER"
+    qos: 2
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    retain: true
+switch 4:
+  - platform: mqtt
+    name: "Sonoff 4"
+    state_topic: "stat/sonoff-fourth/POWER"
+    command_topic: "cmnd/sonoff-fourth/POWER"
+    qos: 2
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    retain: true
+switch 5:
+  - platform: mqtt
+    name: "Sonoff 5"
+    state_topic: "stat/sonoff-fifth/POWER"
+    command_topic: "cmnd/sonoff-fifth/POWER"
+    qos: 2
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    retain: true
+#switch pow:
+#  - platform: mqtt
+#    name: "Sonoff pow"
+#    state_topic: "stat/sonoff-pow/POWER"
+#    command_topic: "cmnd/sonoff-pow/POWER"
+#    qos: 2
+#    payload_on: "ON"
+#    payload_off: "OFF"
+#    optimistic: false
+#    retain: true
+
+# RGB:
+light:
+  - platform: mqtt_json
+    name: Led Strip
+    state_topic: "home/ESP_LED_RGB_1"
+    command_topic: "home/ESP_LED_RGB_1/set"
+    brightness: true
+    rgb: true
+    effect: true
+    effect_list: [colorfade_slow, colorfade_fast, flash]
+    optimistic: false
+    qos: 0
+  - platform: rpi_gpio_pwm
+    leds:
+      - name: Lightstrip Desktop
+        driver: gpio
+        pins: [27, 17, 22] # [R, G, B]
+        type: rgb
+  - platform: yeelight
+    devices:
+      192.168.1.80:
+        name: Xiaomi Desk Lamp
+        transition: 500
+        use_music_mode: False
+        save_on_change: False
+
+media_player:
+  - platform: plex
+    scan_interval: 1
+    show_all_controls: true
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+  - platform: cast
+    host: 192.168.1.101
+
+#Spotify Playlist Player
+input_number:
+  spotify_volume:
+    name: Volume
+    icon: mdi:volume-high
+    min: 0
+    max: 1
+    step: 0.05
+input_select:
+  spotify_playlist:
+    name: 'Playlist:'
+    options:
+      - Folkmetal
+      - Official Sziget 2018 Line Up playlist
+    icon: mdi:spotify
+  spotify_source:
+    name: 'Source:'
+    options:
+      - Livio PC
+      - P9000
+    initial: Livio PC
+    icon: mdi:speaker-wireless
+
+google_assistant:
+  project_id: !secret gassistant_project_id
+  client_id: !secret gassistant_client_id
+  access_token: !secret gassistant_access_token
+  agent_user_id: !secret gassistant_agent_user_id
+  #api_key: !secret gassistant_api_key
+  exposed_domains:
+    - switch
+    - light
+    - media_player
+
+#Google Calendar
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
+group:
+  default_view:
+    view: yes
+    icon: mdi:home
+    entities:
+      - group.weather
+      - group.bedroom
+      - group.energy
+      - group.media
+      - group.external
+      - group.weblink
+      - group.alarm
+      - group.liviopc
+      - group.automations
+      - group.trackers
+  bedroom_view:
+    name: Bedroom
+    view: yes
+    entities:
+      - group.bedroom
+      - gruop.energy
+      - group.liviopc
+  weather_view:
+    name: Weather
+    view: yes
+    entities:
+      - group.weather
+      - weather.dark_sky
+      - group.external
+  mediaplayer_view:
+    name: Media Player
+    view: yes
+    entities:
+      - media_player.spotify
+      - group.music_spotify
+      - sensor.plex_nas
+      - media_player.plex_web_chrome
+      - media_player.bedroom_2
+  bedroom:
+    name: Bedroom
+    icon: mdi:hotel
+    entities:
+      - switch.bed_light
+      - switch.spotlights
+      - switch.sonoff_3
+      - switch.sonoff_4
+      - switch.sonoff_5
+      - switch.sonoff_pow
+      - light.led_strip
+      - light.lightstrip_desktop
+      - light.xiaomi_desk_lamp
+  energy:
+    name: Energy
+    icon: mdi:power-settings
+    entities:
+      - sensor.current
+      - sensor.energy
+      - sensor.power
+      - sensor.voltage
+  media:
+    name: Media Player
+    icon: mdi:youtube-tv
+    entities:
+     - media_player.spotify
+     - media_player.bedroom_2
+     - media_player.plex_web_chrome
+  music_spotify:
+    name: Music
+    entities:
+    - input_select.spotify_playlist
+    - input_select.spotify_source
+    - script.spotify_music
+    - input_number.spotify_volume
+  external:
+    name: External
+    icon: mdi:weather-sunny
+    entities:
+      - sensor.temperature
+      - sensor.temperature_external
+      - sensor.filtered_realistic_external_temperature
+      - sensor.humidity
+      - sensor.pressure
+  weather:
+    name: Weather
+    icon: mdi:weather-partlycloudy
+    entities:
+      - weather.openweathermap
+      - weather.dark_sky
+      - sensor.weather_alessandria_humidity
+      - sensor.weather_alessandria_temperature
+      - sensor.weather_alessandria_rain
+  automations:
+    name: Automations
+    icon: mdi:home-automation
+    entities:
+      - automation.spotlights_button
+      - automation.all_bedroom_offon
+      - automation.test
+      - automation.2
+  weblink:
+    name: Weblink
+    icon: mdi:web
+    entities:
+      - weblink.router
+      - weblink.plex
+      - weblink.configurator
+  trackers:
+    name: Trackers
+    icon: mdi:access-point-network
+    entities:
+      - device_tracker.sonoff1lan
+      - device_tracker.sonoff2lan
+      - device_tracker.esp8266lan
+      - device_tracker.liviopc
+      - device_tracker.livio_elephone
+      - device_tracker.elephonep9000
+      - device_tracker.wiko
+      - device_tracker.huawei_p8_lite_2017lan
+      - device_tracker.ripeatlasprobe
+      - device_tracker.playstation4
+      - device_tracker.tg789vacxtreamlan
+      - device_tracker.dsldevicelan
+  alarm:
+    name: Alarm Control Panel
+    icon: mdi:alarm-light
+    entities:
+      - alarm_control_panel.c
+  liviopc:
+    name: Livio Pc
+    icon: mdi:desktop-tower
+    entities:
+      - switch.wol_livio_pc
+      - switch.wol_nas
+      - sensor.breaches_liv2mar3gmailcom
+      - sensor.breaches_livioavalleoutlookcom
+      - sensor.breaches_livioavalleprotonmailcom
+      - sensor.breaches_liv2ma3yahoocom
+      - sensor.bad_login
+      - sensor.cpu_temperature
+      - sensor.ssl_cert_expiry
+      - sensor.homeassistant_ssl_certificate
+      - sensor.uptime
+      - sensor.speedtest_download
+      - sensor.speedtest_upload
+      - sensor.speedtest_ping
+      - sensor.fastcom_download
+      - sensor.liviopc01_generic_memory_data_used_memory
+      - sensor.liviopc01_generic_memory_data_available_memory
+      - sensor.liviopc01_intel_core_i54690_load_cpu_total
+      - sensor.liviopc01_intel_core_i54690_temperatures_cpu_package
+      - sensor.liviopc01_nvidia_geforce_gtx_960_temperatures_gpu_core

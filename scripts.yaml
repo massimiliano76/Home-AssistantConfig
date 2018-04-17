@@ -1,0 +1,42 @@
+spotify_music:
+ alias: Play selected spotify playlist
+ sequence:
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.spotify
+      volume_level: '1'
+  -  service: media_player.select_source
+     data_template:
+       entity_id: media_player.spotify
+       source: >
+        {% if is_state("input_select.spotify_source", "Livio PC") %} Livio PC
+        {% elif is_state("input_select.spotify_source", "P9000") %} P9000
+        {% endif %}
+  -  service: media_player.play_media
+     data_template:
+       entity_id: media_player.spotify
+       media_content_type: playlist
+       media_content_id: >
+        {% if is_state("input_select.spotify_playlist", "Folkmetal") %} spotify:user:giobambu:playlist:2dXDilkblnw3uWJLj1dCFM
+        {% elif is_state("input_select.spotify_playlist", "Official Sziget 2018 Line Up playlist") %} spotify:user:szigetfestivalofficial:playlist:6Lbj66HshEjAHxgO7HCpMg
+        {% endif %}
+test_telegram:
+  alias: test_telegram
+  sequence:
+  - service: notify.telegram_push
+    data:
+      title: Test Message
+      message: This is a test Message
+      target:
+        - !secret telegram_allow_chat_ids_1
+        - !secret telegram_allow_chat_ids_2
+      #inline_keyboard:
+      #  - 'Task 1:/command1, Task 2:/command2'
+      #  - 'Task 3:/command3, Task 4:/command4'
+test_html5:
+  alias: test_html5
+  sequence:
+  - service: notify.html5
+    data:
+      title: Test
+      message: This is a test Message
