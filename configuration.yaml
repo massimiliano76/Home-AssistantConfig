@@ -8,7 +8,7 @@ homeassistant:
   customize: !include customize.yaml
   whitelist_external_dirs:
     - /home/homeassistant/.homeassistant/files/
-    
+
 #group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -160,11 +160,24 @@ panel_custom:
     url_path: floorplan
     config: !include floorplan.yaml
 
+panel_iframe:
+  mdiindex:
+    title: MDI Icon Index
+    icon: mdi:vector-square
+    url: https://cdn.rawgit.com/james-fry/home-assistant-mdi/efd95d7a/home-assistant-mdi.html
+
+shell_command:
+  turn_off_liviopc: 'net rpc shutdown -I 192.168.1.106 -U livio%T0buRqFOaQNY'
+  turn_on_liviopc: 'wakeonlan D8:CB:8A:6F:E1:CF'
+  restart_liviopc: 'net rpc shutdown -r -I 192.168.1.106 -U livio%T0buRqFOaQNY'
+
 switch wol:
   - platform: wake_on_lan
     mac_address: !secret wol_mac_address_liviopc
     name: WOL Livio Pc
     host: !secret wol_host_liviopc
+    turn_off:
+      service: shell_command.turn_off_liviopc
   - platform: wake_on_lan
     mac_address: !secret wol_mac_address_nas
     name: WOL NAS
@@ -261,6 +274,8 @@ sensor:
     name: Uptime
   - platform: darksky
     api_key: !secret dark_sky_api_key
+    latitude: !secret latitude
+    longitude: !secret longitude
     monitored_conditions:
       - summary
       - icon

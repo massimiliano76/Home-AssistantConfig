@@ -135,7 +135,7 @@
 #If probabilly rainy send telegram notification
 - action:
   - data:
-      message: 'test: forse piove!'
+      message: 'Forse piove!'
       data:
         photo:
           file: /home/homeassistant/.homeassistant/files/rain.jpg
